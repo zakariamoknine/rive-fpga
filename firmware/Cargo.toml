@@ -1,0 +1,19 @@
+[package]
+name = "rive-firmware"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+path = "main.rs"
+name = "rive-firmware"
+bench = false
+test = false
+
+[dependencies]
+sbi-rt = "0.0.3"
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
