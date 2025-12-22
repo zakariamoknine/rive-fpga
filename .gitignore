@@ -1,0 +1,6 @@
+build/
+
+.Xil/
+rive-fpga.*
+*.xpr
+*.mmi
