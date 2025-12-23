@@ -24,9 +24,9 @@ pub(crate) unsafe fn iowrite32(addr: usize, val: u32)
     unsafe { core::ptr::write_volatile(addr as *mut u32, val); }
 }
 
-/*
- * UART 16550
- */
+//
+// UART 16550
+//
 pub(crate) mod uart {
     pub(crate) const BASE_ADDR: usize = 0x4A00_0000;
 
@@ -56,13 +56,13 @@ pub(crate) mod uart {
     pub(crate) const MCR_RTS: u32 = 1 << 1;
 }
 
-/*
- * GPIO
- */
+//
+// GPIO
+//
 pub(crate) mod gpio {
-    pub(crate) const LEDS_BASE_ADDR: usize = 0x4000_0000;
-    pub(crate) const SWITCHES_BASE_ADDR: usize = 0x4001_0000;
-    pub(crate) const BUTTONS_BASE_ADDR: usize = 0x4002_0000;
+    pub(crate) const SWITCHES_BASE_ADDR: usize = 0x4000_0000;
+    pub(crate) const BUTTONS_BASE_ADDR: usize = 0x4100_0000;
+    pub(crate) const LEDS_BASE_ADDR: usize = 0x4200_0000;
 
     pub(crate) const GIER_OFFSET: usize = 0x11C;
     pub(crate) const IP_IER_OFFSET: usize = 0x128;
@@ -76,9 +76,9 @@ pub(crate) mod gpio {
     pub(crate) const BUTTONS_IPISR: usize = BUTTONS_BASE_ADDR + IP_ISR_OFFSET;
 }
 
-/*
- * CLINT
- */
+//
+// CLINT
+//
 pub(crate) mod clint {
     pub(crate) const BASE_ADDR: usize = 0x3000_0000;
 
@@ -87,9 +87,9 @@ pub(crate) mod clint {
     pub(crate) const MTIME: usize = BASE_ADDR + 0xBFF8;
 }
 
-/*
- * PLIC
- */
+//
+// PLIC
+//
 pub(crate) mod plic {
     pub(crate) const BASE_ADDR: usize = 0x3A00_0000;
 
@@ -110,16 +110,18 @@ pub(crate) mod plic {
     pub(crate) const GPIO_BUTTONS_ID: usize = 8;
 }
 
-/*
- * DDR2 SDRAM & Framebuffer
- */
+//
+// DDR2 SDRAM
+//
 pub(crate) mod ddr2 {
     pub(crate) const BASE_ADDR: usize = 0x8000_0000;
 
     pub(crate) const SIZE: u32 = 128 * 1024 * 1024;
 }
 
-
+//
+// FRAMEBUFFER
+//
 pub(crate) mod fb {
     pub(crate) const BASE_ADDR: usize = 0x2B00_0000;
 
@@ -128,9 +130,9 @@ pub(crate) mod fb {
     pub(crate) const BPP: u32 = 1;
 }
 
-/*
- * AUDIO PWM & DMA
- */
+//
+// AUDIO PWM
+//
 pub(crate) mod audio {
     pub(crate) const BASE_ADDR: usize = 0x6000_0000;
 
@@ -152,9 +154,9 @@ pub(crate) mod audio {
     pub(crate) const DMA_ERR_IRQEN: u32 = 1 << 14;
 }
 
-/*
- * PMC
- */
+//
+// PMC
+//
 pub(crate) mod pmc {
     pub(crate) const BASE_ADDR: usize = 0x1000_0000;
 

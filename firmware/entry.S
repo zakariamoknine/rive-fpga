@@ -1,6 +1,6 @@
-.section .text.boot
+	.section .text.boot
 
-.global entry
+	.global entry
 entry:
 	/* Setup the global pointer */
 	lla     gp, __global_pointer$
@@ -23,8 +23,15 @@ hang:
 	wfi
 	j       1b
 
-.section .data
-
-.p2align 4
-.space 512
+	/* Keep the stack very small */
+	.section .data
+	.p2align 4
+	.space 512
 firmware_stack:
+
+	/* Embed the fdt in the firmware image */
+	.section .rodata, "a"
+	.balign 8
+	.global __dtb
+__dtb:
+	.incbin "rive-fpga.dtb"

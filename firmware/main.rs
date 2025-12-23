@@ -2,28 +2,47 @@
 #![no_main]
 
 mod mmio;
-use crate::mmio::*;
-
 mod uart8250;
 mod print;
+mod devices;
+mod serial;
+mod sd;
+
+use crate::mmio::*;
 
 core::arch::global_asm!(include_str!("entry.S"));
+
+unsafe extern "C" {
+    static __dtb: usize;
+}
 
 #[panic_handler]
 fn panic(_panic_info: &core::panic::PanicInfo) -> !
 {
-    println!("[ PANIC ]");
+    println!("[PANIC]");
 
     loop { core::hint::spin_loop(); }
 }
 
-unsafe fn fb_draw() {
-    let fb_ptr = fb::BASE_ADDR as *mut u8;
-    let width  = fb::WIDTH as usize;
-    let height = fb::HEIGHT as usize;
-
-    for i in 0..(width * height) {
-        unsafe { fb_ptr.add(i).write_volatile((i ^ 0xFF) as u8); }
+unsafe fn offwego(addr: usize, dtb: usize) -> !
+{
+    unsafe {
+        // fence.i to flush the i-cache
+        // 5 nops to ensure the pipeline is flushed
+        core::arch::asm!(
+            "fence.i",
+            "nop",
+            "nop",
+            "nop",
+            "nop",
+            "nop",
+            "mv   a1, {dtb}",
+            "mv   a0, x0",
+            "jr   {addr}",
+            addr = in(reg) addr,
+            dtb = in(reg) dtb,
+            options(noreturn)
+        );
     }
 }
 
@@ -34,10 +53,28 @@ pub(crate) unsafe extern "C" fn start_firmware() -> !
         // Initialize uart16550
         uart8250::init(uart::BAUDRATE, uart::CLK_FREQ);
 
-        // Indicate we're in
-        println!("Hello, Rive!");
-        fb_draw();
-    }
+        // Initialize devices
+        devices::init();
 
-    loop {}
+        // Indicate we're in
+        println!("rive-fpga is booting..");
+        devices::draw();
+
+        // Read MSEL for boot mode
+        let boot_mode = devices::msel();
+
+        //match boot_mode {
+        //    0 => sd::load(ddr2::BASE_ADDR);
+        //    1 => serial::load(ddr2::BASE_ADDR);
+        //    _ => panic!("MSEL");
+        //}
+        
+        match boot_mode {
+            0 => println!("SD"),
+            1 => println!("SERIAL"),
+            _ => panic!("MSEL"),
+        }
+
+        offwego(ddr2::BASE_ADDR, __dtb);
+    }
 }

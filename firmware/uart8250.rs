@@ -28,13 +28,13 @@ pub(crate) unsafe fn putc(c: u8)
     }
 }
 
-pub(crate) unsafe fn getc() -> u8
-{
-    unsafe {
-        while (ioread32(uart::LSR) & uart::LSR_DR) == 0 {
-            core::hint::spin_loop();
-        }
-
-        return ioread32(uart::RBR) as u8;
-    }
-}
+//pub(crate) unsafe fn getc() -> u8
+//{
+//    unsafe {
+//        while (ioread32(uart::LSR) & uart::LSR_DR) == 0 {
+//            core::hint::spin_loop();
+//        }
+//
+//        return ioread32(uart::RBR) as u8;
+//    }
+//}

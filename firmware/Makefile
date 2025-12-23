@@ -4,6 +4,8 @@ else
 	BUILD_DIR := $(CURDIR)/build
 endif
 
+DTC     := dtc
+
 CARGO   := cargo
 RUSTC   := rustc
 OBJCOPY := rust-objcopy
@@ -35,7 +37,7 @@ MEM       := $(BUILD_DIR)/firmware.mem
 
 all: $(FIRMWARE)
 
-$(FIRMWARE): build
+$(FIRMWARE): dtb build
 	$(OBJCOPY)  --strip-debug -O binary $(ELF) $(FIRMWARE)
 	echo "@00000000" > $(MEM)
 	xxd -ps -c4 -g4 $(FIRMWARE) >> $(MEM)
@@ -48,5 +50,8 @@ build:
 		--release \
 		-Z build-std=core,alloc \
 		-- $(RUSTFLAGS)
+
+dtb:
+	$(DTC) -I dts -O dtb -o rive-fpga.dtb rive-fpga.dts
 
 .PHONY: all build

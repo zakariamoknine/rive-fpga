@@ -3,7 +3,7 @@ ENTRY(entry)
 
 SECTIONS
 {
-	. = 0x00000000;
+	. = 0x00004000;
 
 	.text : {
 		KEEP(*(.text.boot))
