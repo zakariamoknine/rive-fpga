@@ -4,3 +4,6 @@ build/
 rive-fpga.*
 *.xpr
 *.mmi
+*.log
+*.jou
+*.str
