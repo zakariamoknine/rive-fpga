@@ -1,6 +1,6 @@
-// Generator : SpinalHDL dev    git head : 4517db37be37711b4b4c550827f308d3612ad39b
+// Generator : SpinalHDL dev    git head : 84ef7b5b6278854e0e80738536f72c64fa14b730
 // Component : VexiiRiscv
-// Git hash  : a7445edd6fb9f3008eddc5baf08ea3dc5e769fa1
+// Git hash  : fc927f9311a0f0710a1a90b88b62d9d5a020e9c6
 
 `timescale 1ns/1ps
 
@@ -5351,22 +5351,22 @@ module VexiiRiscv (
   reg        [59:0]   _zz_WhiteboxerPlugin_logic_perf_dispatchHazardsCounter_1;
   reg        [59:0]   _zz_WhiteboxerPlugin_logic_perf_dispatchHazardsCounter_2;
   wire       [59:0]   WhiteboxerPlugin_logic_perf_dispatchHazardsCounter;
-  wire                when_Utils_l593;
+  wire                when_Utils_l598;
   reg                 _zz_WhiteboxerPlugin_logic_perf_candidatesCountCounters_0;
   reg        [59:0]   _zz_WhiteboxerPlugin_logic_perf_candidatesCountCounters_0_1;
   reg        [59:0]   _zz_WhiteboxerPlugin_logic_perf_candidatesCountCounters_0_2;
   wire       [59:0]   WhiteboxerPlugin_logic_perf_candidatesCountCounters_0;
-  wire                when_Utils_l593_1;
+  wire                when_Utils_l598_1;
   reg                 _zz_WhiteboxerPlugin_logic_perf_candidatesCountCounters_1;
   reg        [59:0]   _zz_WhiteboxerPlugin_logic_perf_candidatesCountCounters_1_1;
   reg        [59:0]   _zz_WhiteboxerPlugin_logic_perf_candidatesCountCounters_1_2;
   wire       [59:0]   WhiteboxerPlugin_logic_perf_candidatesCountCounters_1;
-  wire                when_Utils_l593_2;
+  wire                when_Utils_l598_2;
   reg                 _zz_WhiteboxerPlugin_logic_perf_dispatchFeedCounters_0;
   reg        [59:0]   _zz_WhiteboxerPlugin_logic_perf_dispatchFeedCounters_0_1;
   reg        [59:0]   _zz_WhiteboxerPlugin_logic_perf_dispatchFeedCounters_0_2;
   wire       [59:0]   WhiteboxerPlugin_logic_perf_dispatchFeedCounters_0;
-  wire                when_Utils_l593_3;
+  wire                when_Utils_l598_3;
   reg                 _zz_WhiteboxerPlugin_logic_perf_dispatchFeedCounters_1;
   reg        [59:0]   _zz_WhiteboxerPlugin_logic_perf_dispatchFeedCounters_1_1;
   reg        [59:0]   _zz_WhiteboxerPlugin_logic_perf_dispatchFeedCounters_1_2;
@@ -10621,13 +10621,13 @@ module VexiiRiscv (
   assign when_LsuPlugin_l264_1 = (|(LsuPlugin_logic_onCtrl_hartRegulation_refill & (~ LsuL1_REFILL_BUSY)));
   assign when_LsuPlugin_l993 = ((((((execute_ctrl4_up_LANE_SEL_lane0 && execute_ctrl4_down_AguPlugin_SEL_lane0) && (! execute_ctrl4_down_LsuPlugin_logic_FROM_PREFETCH_lane0)) && (! execute_ctrl4_down_LsuPlugin_logic_onPma_IO_lane0)) && (! execute_ctrl4_down_LsuPlugin_logic_FENCE_lane0)) && 1'b1) && ((execute_ctrl4_down_LsuL1_HAZARD_lane0 || execute_ctrl4_down_LsuL1_MISS_lane0) || execute_ctrl4_down_LsuL1_MISS_UNIQUE_lane0));
   assign when_LsuPlugin_l268_1 = (|execute_ctrl4_down_LsuL1_WAIT_REFILL_lane0);
-  assign LsuPlugin_logic_onCtrl_commitProbeReq = ((((execute_ctrl4_down_LANE_SEL_lane0 && execute_ctrl4_down_isReady) && (! execute_lane0_ctrls_4_downIsCancel)) && execute_ctrl4_down_AguPlugin_SEL_lane0) && execute_ctrl4_down_LsuPlugin_logic_FROM_LSU_lane0);
-  assign LsuPlugin_logic_commitProbe_valid = (((execute_ctrl4_down_LANE_SEL_lane0 && execute_ctrl4_down_isReady) && (! execute_lane0_ctrls_4_downIsCancel)) && (execute_ctrl4_down_AguPlugin_SEL_lane0 ? ((execute_ctrl4_down_LsuPlugin_logic_FROM_LSU_lane0 && ((! LsuPlugin_logic_onCtrl_lsuTrap) || (! LsuPlugin_logic_onCtrl_commitProbeToken))) && ((execute_ctrl4_down_LsuL1_LOAD_lane0 || execute_ctrl4_down_LsuL1_STORE_lane0) || execute_ctrl4_down_LsuL1_PREFETCH_lane0)) : (execute_ctrl4_down_LsuPlugin_logic_FROM_PREFETCH_lane0 && execute_ctrl4_down_LsuL1_HAZARD_lane0)));
+  assign LsuPlugin_logic_onCtrl_commitProbeReq = ((((((((((execute_ctrl4_down_LANE_SEL_lane0 && execute_ctrl4_down_isReady) && (! execute_lane0_ctrls_4_downIsCancel)) && execute_ctrl4_down_AguPlugin_SEL_lane0) && execute_ctrl4_down_LsuPlugin_logic_FROM_LSU_lane0) && (execute_ctrl4_down_LsuL1_LOAD_lane0 || execute_ctrl4_down_LsuL1_STORE_lane0)) && (! execute_ctrl4_down_LsuL1_PREFETCH_lane0)) && (! execute_ctrl4_down_LsuL1_ATOMIC_lane0)) && (! execute_ctrl4_down_LsuL1_FLUSH_lane0)) && (! execute_ctrl4_down_LsuL1_CLEAN_lane0)) && (! execute_ctrl4_down_LsuL1_INVALID_lane0));
+  assign LsuPlugin_logic_commitProbe_valid = (LsuPlugin_logic_onCtrl_commitProbeReq && (! LsuPlugin_logic_onCtrl_commitProbeToken));
   assign LsuPlugin_logic_commitProbe_payload_address = execute_ctrl4_down_LsuL1_MIXED_ADDRESS_lane0;
   assign LsuPlugin_logic_commitProbe_payload_load = execute_ctrl4_down_LsuL1_LOAD_lane0;
   assign LsuPlugin_logic_commitProbe_payload_store = execute_ctrl4_down_LsuL1_STORE_lane0;
   assign LsuPlugin_logic_commitProbe_payload_trap = LsuPlugin_logic_onCtrl_lsuTrap;
-  assign LsuPlugin_logic_commitProbe_payload_miss = ((execute_ctrl4_down_LsuL1_MISS_lane0 && (! execute_ctrl4_down_LsuL1_HAZARD_lane0)) && (! execute_ctrl4_down_LsuPlugin_logic_MMU_FAILURE_lane0));
+  assign LsuPlugin_logic_commitProbe_payload_miss = ((((execute_ctrl4_down_LsuL1_MISS_lane0 || execute_ctrl4_down_LsuL1_MISS_UNIQUE_lane0) || execute_ctrl4_down_LsuL1_HAZARD_lane0) && (! execute_ctrl4_down_LsuPlugin_logic_MMU_FAILURE_lane0)) && 1'b1);
   assign LsuPlugin_logic_commitProbe_payload_io = execute_ctrl4_down_LsuPlugin_logic_onPma_IO_lane0;
   assign LsuPlugin_logic_commitProbe_payload_prefetchFailed = execute_ctrl4_down_LsuPlugin_logic_FROM_PREFETCH_lane0;
   assign LsuPlugin_logic_commitProbe_payload_pc = execute_ctrl4_down_PC_lane0;
@@ -16455,10 +16455,10 @@ module VexiiRiscv (
   end
 
   assign WhiteboxerPlugin_logic_perf_dispatchHazardsCounter = _zz_WhiteboxerPlugin_logic_perf_dispatchHazardsCounter_2;
-  assign when_Utils_l593 = (WhiteboxerPlugin_logic_perf_candidatesCount == 1'b0);
+  assign when_Utils_l598 = (WhiteboxerPlugin_logic_perf_candidatesCount == 1'b0);
   always @(*) begin
     _zz_WhiteboxerPlugin_logic_perf_candidatesCountCounters_0 = 1'b0;
-    if(when_Utils_l593) begin
+    if(when_Utils_l598) begin
       _zz_WhiteboxerPlugin_logic_perf_candidatesCountCounters_0 = 1'b1;
     end
   end
@@ -16471,10 +16471,10 @@ module VexiiRiscv (
   end
 
   assign WhiteboxerPlugin_logic_perf_candidatesCountCounters_0 = _zz_WhiteboxerPlugin_logic_perf_candidatesCountCounters_0_2;
-  assign when_Utils_l593_1 = (WhiteboxerPlugin_logic_perf_candidatesCount == 1'b1);
+  assign when_Utils_l598_1 = (WhiteboxerPlugin_logic_perf_candidatesCount == 1'b1);
   always @(*) begin
     _zz_WhiteboxerPlugin_logic_perf_candidatesCountCounters_1 = 1'b0;
-    if(when_Utils_l593_1) begin
+    if(when_Utils_l598_1) begin
       _zz_WhiteboxerPlugin_logic_perf_candidatesCountCounters_1 = 1'b1;
     end
   end
@@ -16487,10 +16487,10 @@ module VexiiRiscv (
   end
 
   assign WhiteboxerPlugin_logic_perf_candidatesCountCounters_1 = _zz_WhiteboxerPlugin_logic_perf_candidatesCountCounters_1_2;
-  assign when_Utils_l593_2 = (WhiteboxerPlugin_logic_perf_dispatchFeedCount == 1'b0);
+  assign when_Utils_l598_2 = (WhiteboxerPlugin_logic_perf_dispatchFeedCount == 1'b0);
   always @(*) begin
     _zz_WhiteboxerPlugin_logic_perf_dispatchFeedCounters_0 = 1'b0;
-    if(when_Utils_l593_2) begin
+    if(when_Utils_l598_2) begin
       _zz_WhiteboxerPlugin_logic_perf_dispatchFeedCounters_0 = 1'b1;
     end
   end
@@ -16503,10 +16503,10 @@ module VexiiRiscv (
   end
 
   assign WhiteboxerPlugin_logic_perf_dispatchFeedCounters_0 = _zz_WhiteboxerPlugin_logic_perf_dispatchFeedCounters_0_2;
-  assign when_Utils_l593_3 = (WhiteboxerPlugin_logic_perf_dispatchFeedCount == 1'b1);
+  assign when_Utils_l598_3 = (WhiteboxerPlugin_logic_perf_dispatchFeedCount == 1'b1);
   always @(*) begin
     _zz_WhiteboxerPlugin_logic_perf_dispatchFeedCounters_1 = 1'b0;
-    if(when_Utils_l593_3) begin
+    if(when_Utils_l598_3) begin
       _zz_WhiteboxerPlugin_logic_perf_dispatchFeedCounters_1 = 1'b1;
     end
   end
@@ -17629,7 +17629,7 @@ module VexiiRiscv (
       PcPlugin_logic_harts_0_self_id <= 10'h0;
       PcPlugin_logic_harts_0_self_increment <= 1'b0;
       PcPlugin_logic_harts_0_self_fault <= 1'b0;
-      PcPlugin_logic_harts_0_self_state <= 39'h0;
+      PcPlugin_logic_harts_0_self_state <= 39'h0000004000;
       PcPlugin_logic_harts_0_holdReg <= 1'b1;
       FetchL1Plugin_logic_translationStorage_logic_sl_0_allocId_value <= 1'b0;
       LsuPlugin_logic_translationStorage_logic_sl_0_allocId_value <= 2'b00;
