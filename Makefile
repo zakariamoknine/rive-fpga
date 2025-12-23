@@ -27,13 +27,9 @@ kernel: firmware
 	@mkdir -p $(dir $(KERNEL_BUILD_DIR))
 	$(MAKE) -C submodules/rive ARCH=riscv64 O=$(KERNEL_BUILD_DIR)
 
-firmware: dtb
+firmware:
 	@mkdir -p $(dir $(FIRMWARE_BUILD_DIR))
 	$(MAKE) -C firmware O=$(FIRMWARE_BUILD_DIR)
-
-dtb:
-	@mkdir -p $(DTB_BUILD_DIR)
-	$(DTC) -I dts -O dtb -o $(DTB_BUILD_DIR)/rive-fpga.dtb $(PWD)/dts/rive-fpga.dts
 
 serial_boot:
 	./scripts/serial_boot.py \
@@ -53,4 +49,4 @@ cpu:
 clean:
 	rm -rf $(BUILD_DIR)
 
-.PHONY: all sbi kernel firmware dtb serial_boot bram cpu clean
+.PHONY: all sbi kernel firmware serial_boot bram cpu clean
