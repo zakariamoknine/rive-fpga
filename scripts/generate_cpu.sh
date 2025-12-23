@@ -12,7 +12,7 @@ cd submodules/VexiiRiscv
 #
 sbt "Test/runMain vexiiriscv.Generate
 	--xlen 64 \
-	--reset-vector 00000000 \
+	--reset-vector 0x00004000 \
 	--with-mul --with-div --with-rva --with-rvc \
 	--with-rvZcbm \
 	--with-supervisor --with-user \
