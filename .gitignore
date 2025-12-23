@@ -1,7 +1,13 @@
 build/
 
 .Xil/
-rive-fpga.*
+rive-fpga.cache/
+rive-fpga.gen/
+rive-fpga.hw/
+rive-fpga.ip_user_files/
+rive-fpga.runs/
+rive-fpga.sim/
+rive-fpga.srcs/
 *.xpr
 *.mmi
 *.log
