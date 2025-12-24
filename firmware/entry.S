@@ -6,7 +6,7 @@ entry:
 	lla     gp, __global_pointer$
 
 	/* Setup the stack */
-	la      sp, firmware_stack
+	lla     sp, firmware_stack
 
 	/* Clear BSS */
 	la      t0, __bss_start
@@ -35,3 +35,5 @@ firmware_stack:
 	.global __dtb
 __dtb:
 	.incbin "rive-fpga.dtb"
+	.global __dtb_end
+__dtb_end:

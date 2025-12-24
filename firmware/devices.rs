@@ -50,7 +50,6 @@ pub(crate) unsafe fn init()
 
 pub(crate) unsafe fn draw()
 {
-    let fb_ptr = fb::BASE_ADDR as *mut u8;
     let width  = fb::WIDTH as usize;
     let height = fb::HEIGHT as usize;
 
@@ -60,9 +59,9 @@ pub(crate) unsafe fn draw()
             let g = (y * 7) / (height - 1);
             let b = 0;
 
-            let color = ((r as u8) << 5) | ((g as u8) << 2) | (b as u8);
+            let color: u8 = ((r as u8) << 5) | ((g as u8) << 2) | (b as u8);
 
-            unsafe { fb_ptr.add(y * width + x).write_volatile(color); }
+            unsafe { iowrite8(fb::BASE_ADDR + (y * width + x), color); }
         }
     }
 }
@@ -70,4 +69,51 @@ pub(crate) unsafe fn draw()
 pub(crate) unsafe fn msel() -> u32
 {
     unsafe { ioread32(gpio::SWITCHES_BASE_ADDR) & 0x01 }
+}
+
+#[inline(always)]
+pub(crate) unsafe fn rdtime() -> u64
+{
+    let ticks: u64;
+
+    unsafe {
+        core::arch::asm!(
+            "rdtime {0}",
+            out(reg) ticks
+        );
+    }
+
+    ticks
+}
+
+pub(crate) unsafe fn udelay(us: u32)
+{
+    // Use rdtime register instead of the CLINT device, it's faster
+    unsafe { 
+        let start = rdtime();
+
+        let wait_ticks = (us as u64) * ((sys::TIMEBASE_CLK_FREQ / 1_000_000) as u64);
+    
+        while rdtime().wrapping_sub(start) < wait_ticks {
+            core::hint::spin_loop();
+        }
+    }
+}
+
+pub(crate) unsafe fn reboot() -> !
+{
+    unsafe {
+        iowrite32(pmc::CONTROL, pmc::REBOOT);
+    }
+
+    unreachable!();
+}
+
+pub(crate) unsafe fn poweroff() -> !
+{
+    unsafe {
+        iowrite32(pmc::CONTROL, pmc::POWEROFF);
+    }
+
+    unreachable!();
 }

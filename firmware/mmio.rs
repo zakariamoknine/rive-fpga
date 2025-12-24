@@ -25,6 +25,14 @@ pub(crate) unsafe fn iowrite32(addr: usize, val: u32)
 }
 
 //
+// SYS INFO
+//
+pub(crate) mod sys {
+    pub(crate) const CLK_FREQ: u32 = 100_000_000;
+    pub(crate) const TIMEBASE_CLK_FREQ: u32 = 100_000_000;
+}
+
+//
 // UART 16550
 //
 pub(crate) mod uart {
@@ -152,6 +160,33 @@ pub(crate) mod audio {
     pub(crate) const DMA_RS_BIT: u32 = 1 << 0;
     pub(crate) const DMA_IOC_IRQEN: u32 = 1 << 12;
     pub(crate) const DMA_ERR_IRQEN: u32 = 1 << 14;
+}
+
+//
+// SD
+//
+pub(crate) mod sd {
+    pub(crate) const BASE_ADDR: usize = 0x5A00_0000;
+
+    pub(crate) const ARGUMENT: usize = BASE_ADDR + 0x00;
+    pub(crate) const COMMAND: usize = BASE_ADDR + 0x04;
+    pub(crate) const RESPONSE_1: usize = BASE_ADDR + 0x08;
+    pub(crate) const RESPONSE_2: usize = BASE_ADDR + 0x0c;
+    pub(crate) const RESPONSE_3: usize = BASE_ADDR + 0x10;
+    pub(crate) const RESPONSE_4: usize = BASE_ADDR + 0x14;
+    pub(crate) const CONTROL: usize = BASE_ADDR + 0x1C;
+    pub(crate) const TIMEOUT: usize = BASE_ADDR + 0x20;
+    pub(crate) const CLOCK_DIVIDER: usize = BASE_ADDR + 0x24;
+    pub(crate) const SOFTWARE_RESET: usize = BASE_ADDR + 0x28;
+    pub(crate) const POWER_CONTROL: usize = BASE_ADDR + 0x2C;
+    pub(crate) const CAPABILITY: usize = BASE_ADDR + 0x30;
+    pub(crate) const CMD_IRQ_STATUS: usize = BASE_ADDR + 0x34;
+    pub(crate) const CMD_IRQ_ENABLE: usize = BASE_ADDR + 0x38;
+    pub(crate) const DAT_IRQ_STATUS: usize = BASE_ADDR + 0x3C;
+    pub(crate) const DAT_IRQ_ENABLE: usize = BASE_ADDR + 0x40;
+    pub(crate) const BLOCK_SIZE: usize = BASE_ADDR + 0x44;
+    pub(crate) const BLOCK_COUNT: usize = BASE_ADDR + 0x48;
+    pub(crate) const DMA_ADDR: usize = BASE_ADDR + 0x60;
 }
 
 //
