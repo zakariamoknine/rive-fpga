@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ! -d "submodules/VexiiRiscv" ]; then
-    echo "ERROR: submodules/VexiiRiscv not found. Are you running this script from project's root?" >&2
+    echo "ERROR: submodules/VexiiRiscv not found. Ensure you're running this script from project's root." >&2
     exit 1
 fi
 
