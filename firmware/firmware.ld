@@ -25,12 +25,14 @@ SECTIONS
 		*(.data .data.*)
 	}
 
-	PROVIDE(__bss_start = .);
 	.bss : {
 		. = ALIGN(16);
+		__bss_start = .;
 		*(.sbss .sbss.*)
 		. = ALIGN(16);
 		*(.bss .bss.*)
+		__bss_end = .;
 	}
-	PROVIDE(__bss_end = .);
+
+	__firmware_end = .;
 }

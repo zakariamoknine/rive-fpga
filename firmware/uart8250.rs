@@ -12,7 +12,7 @@ pub(crate) unsafe fn init(baudrate: u32, clk_hz: u32)
         iowrite32(uart::FCR, uart::FCR_ENABLE_FIFO | uart::FCR_CLEAR_RX | uart::FCR_CLEAR_TX);
         iowrite32(uart::MCR, uart::MCR_DTR | uart::MCR_RTS);
 
-        /* disable interrupts */
+        // Disable interrupts
         iowrite32(uart::IER, 0);
     }
 }
@@ -28,13 +28,13 @@ pub(crate) unsafe fn putc(c: u8)
     }
 }
 
-//pub(crate) unsafe fn getc() -> u8
-//{
-//    unsafe {
-//        while (ioread32(uart::LSR) & uart::LSR_DR) == 0 {
-//            core::hint::spin_loop();
-//        }
-//
-//        return ioread32(uart::RBR) as u8;
-//    }
-//}
+pub(crate) unsafe fn getc() -> u8
+{
+    unsafe {
+        while (ioread32(uart::LSR) & uart::LSR_DR) == 0 {
+            core::hint::spin_loop();
+        }
+
+        return ioread32(uart::RBR) as u8;
+    }
+}

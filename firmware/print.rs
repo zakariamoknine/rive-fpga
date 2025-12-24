@@ -39,6 +39,6 @@ pub(crate) fn _print(args: core::fmt::Arguments)
 
     let mut print_dummy = Print {};
 
-    // To avoid to calling unwrap
+    // Avoid calling unwrap
     let _ = print_dummy.write_fmt(args);
 }

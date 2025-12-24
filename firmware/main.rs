@@ -63,18 +63,12 @@ pub(crate) unsafe extern "C" fn start_firmware() -> !
         // Read MSEL for boot mode
         let boot_mode = devices::msel();
 
-        //match boot_mode {
-        //    0 => sd::load(ddr2::BASE_ADDR);
-        //    1 => serial::load(ddr2::BASE_ADDR);
-        //    _ => panic!("MSEL");
-        //}
-        
         match boot_mode {
-            0 => println!("SD"),
-            1 => println!("SERIAL"),
+            0 => sd::load(ddr2::BASE_ADDR),
+            1 => serial::load(ddr2::BASE_ADDR),
             _ => panic!("MSEL"),
         }
-
+        
         offwego(ddr2::BASE_ADDR, __dtb);
     }
 }
