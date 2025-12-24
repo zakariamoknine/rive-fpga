@@ -1,6 +1,6 @@
 use crate::mmio::*;
 
-unsafe fn init_irqchips()
+fn init_irqchips()
 {
     unsafe {
         for i in 0..plic::MAX_SOURCES {
@@ -15,7 +15,7 @@ unsafe fn init_irqchips()
     }
 }
 
-unsafe fn init_audio()
+fn init_audio()
 {
     unsafe {
         // Disable the chip entirely
@@ -32,23 +32,21 @@ unsafe fn init_audio()
     }
 }
 
-unsafe fn init_pmc()
+fn init_pmc()
 {
     unsafe {
         iowrite32(pmc::CONTROL, 0);
     }
 }
 
-pub(crate) unsafe fn init()
+pub(crate) fn init()
 {
-    unsafe {
-        init_irqchips();
-        init_audio();
-        init_pmc();
-    }
+    init_irqchips();
+    init_audio();
+    init_pmc();
 }
 
-pub(crate) unsafe fn draw()
+pub(crate) fn draw()
 {
     let width  = fb::WIDTH as usize;
     let height = fb::HEIGHT as usize;
@@ -66,13 +64,13 @@ pub(crate) unsafe fn draw()
     }
 }
 
-pub(crate) unsafe fn msel() -> u32
+pub(crate) fn msel() -> u32
 {
     unsafe { ioread32(gpio::SWITCHES_BASE_ADDR) & 0x01 }
 }
 
 #[inline(always)]
-pub(crate) unsafe fn rdtime() -> u64
+pub(crate) fn rdtime() -> u64
 {
     let ticks: u64;
 
@@ -86,21 +84,19 @@ pub(crate) unsafe fn rdtime() -> u64
     ticks
 }
 
-pub(crate) unsafe fn udelay(us: u32)
+pub(crate) fn udelay(us: u32)
 {
     // Use rdtime register instead of the CLINT device, it's faster
-    unsafe { 
-        let start = rdtime();
-
-        let wait_ticks = (us as u64) * ((sys::TIMEBASE_CLK_FREQ / 1_000_000) as u64);
+    let start = rdtime();
     
-        while rdtime().wrapping_sub(start) < wait_ticks {
-            core::hint::spin_loop();
-        }
+    let wait_ticks = (us as u64) * ((sys::TIMEBASE_CLK_FREQ / 1_000_000) as u64);
+    
+    while rdtime().wrapping_sub(start) < wait_ticks {
+        core::hint::spin_loop();
     }
 }
 
-pub(crate) unsafe fn reboot() -> !
+pub(crate) fn reboot() -> !
 {
     unsafe {
         iowrite32(pmc::CONTROL, pmc::REBOOT);
@@ -109,7 +105,7 @@ pub(crate) unsafe fn reboot() -> !
     unreachable!();
 }
 
-pub(crate) unsafe fn poweroff() -> !
+pub(crate) fn poweroff() -> !
 {
     unsafe {
         iowrite32(pmc::CONTROL, pmc::POWEROFF);

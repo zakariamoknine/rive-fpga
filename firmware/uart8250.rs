@@ -1,6 +1,6 @@
 use crate::mmio::*;
 
-pub(crate) unsafe fn init(baudrate: u32, clk_hz: u32)
+pub(crate) fn init(baudrate: u32, clk_hz: u32)
 {
     unsafe {
         let divisor = (clk_hz / (16 * baudrate)) as u16;
@@ -17,7 +17,7 @@ pub(crate) unsafe fn init(baudrate: u32, clk_hz: u32)
     }
 }
 
-pub(crate) unsafe fn putc(c: u8)
+pub(crate) fn putc(c: u8)
 {
     unsafe {
         while (ioread32(uart::LSR) & uart::LSR_THRE) == 0 {
@@ -28,7 +28,7 @@ pub(crate) unsafe fn putc(c: u8)
     }
 }
 
-pub(crate) unsafe fn getc() -> u8
+pub(crate) fn getc() -> u8
 {
     unsafe {
         while (ioread32(uart::LSR) & uart::LSR_DR) == 0 {

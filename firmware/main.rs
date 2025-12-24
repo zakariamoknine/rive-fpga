@@ -21,10 +21,8 @@ fn panic(panic_info: &core::panic::PanicInfo) -> !
 
     // Wait 2 seconds then reboot the box
     println!("Rebooting..");
-    unsafe {
-        devices::udelay(2000000);
-        devices::reboot();
-    }
+    devices::udelay(2000000);
+    devices::reboot();
 }
 
 unsafe extern "C" {
@@ -63,7 +61,7 @@ unsafe fn copy_dtb(addr: usize)
     unsafe {
         let start = &__dtb as *const usize as usize;
         let end = &__dtb_end as *const usize as usize;
-
+        
         let mut i = 0;
         while (start + i) < end {
             iowrite8(addr + i, ioread8(start + i));
@@ -75,30 +73,29 @@ unsafe fn copy_dtb(addr: usize)
 #[unsafe(no_mangle)]
 pub(crate) unsafe extern "C" fn start_firmware() -> !
 {
+    // Initialize uart16550
+    uart8250::init(uart::BAUDRATE, uart::CLK_FREQ);
+    
+    // Initialize devices
+    devices::init();
+    
+    // Indicate we're in
+    println!("rive-fpga is booting..");
+    devices::draw();
+    
+    // Read MSEL for boot mode
+    let boot_mode = devices::msel();
+    
     unsafe {
-        // Initialize uart16550
-        uart8250::init(uart::BAUDRATE, uart::CLK_FREQ);
-
-        // Initialize devices
-        devices::init();
-
-        // Indicate we're in
-        println!("rive-fpga is booting..");
-        devices::draw();
-
-        // Read MSEL for boot mode
-        let boot_mode = devices::msel();
-
         let result = match boot_mode {
             0 => sd::load(ddr2::BASE_ADDR),
             1 => serial::load(ddr2::BASE_ADDR),
             _ => panic!("INVALID MSEL CONFIGURATION"),
         };
-
+        
         result.expect("PAYLOAD LOADING FAILED");
-
+    
         copy_dtb(DTB_BASE_ADDR);
-
         offwego(ddr2::BASE_ADDR, DTB_BASE_ADDR);
     }
 }
