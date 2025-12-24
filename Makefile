@@ -8,6 +8,7 @@ DTC ?= dtc
 BUILD_DIR := $(PWD)/build
 
 SBI_BUILD_DIR      := $(BUILD_DIR)/opensbi
+SBI_PAYLOAD_DIR    := $(SBI_BUILD_DIR)/platform/generic/firmware/
 KERNEL_BUILD_DIR   := $(BUILD_DIR)/rive
 FIRMWARE_BUILD_DIR := $(BUILD_DIR)/firmware
 DTB_BUILD_DIR      := $(BUILD_DIR)/dtb
@@ -32,12 +33,8 @@ firmware:
 	$(MAKE) -C firmware O=$(FIRMWARE_BUILD_DIR)
 
 serial_boot:
-	./scripts/serial_boot.py \
-		$(KERNEL_BUILD_DIR)/kernel.bin \
-	       	-p /dev/ttyUSB1 -b 115200
-	./scripts/serial_boot.py \
-		$(SBI_BUILD_DIR)/platform/generic/firmware/fw_jump.bin \
-	       	-p /dev/ttyUSB1 -b 115200
+	./scripts/serial_boot.py $(SBI_PAYLOAD_DIR)/fw_payload.bin \
+		-p /dev/ttyUSB1 -b 115200
 
 bram:
 	./scripts/update_bram.sh $(FIRMWARE_BUILD_DIR)/firmware.mem
