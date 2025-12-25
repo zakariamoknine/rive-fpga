@@ -23,6 +23,20 @@ pub(crate) unsafe fn iowrite32(addr: usize, val: u32)
 {
     unsafe { core::ptr::write_volatile(addr as *mut u32, val); }
 }
+// These are the functions I just added . 
+#[inline(always)]
+pub fn uart_getc() -> u8 {
+    
+    while unsafe { ioread32(uart::LSR) } & uart::LSR_DR == 0 {}
+    unsafe { ioread8(uart::RBR) }
+}
+
+#[inline(always)]
+pub fn uart_putc(c: u8) {
+    // Wait until Transmitter Holding Register Empty
+    while unsafe { ioread32(uart::LSR) } & uart::LSR_THRE == 0 {}
+    unsafe { iowrite8(uart::THR, c) }
+}
 
 //
 // SYS INFO
