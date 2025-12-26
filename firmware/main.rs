@@ -90,7 +90,7 @@ pub(crate) unsafe extern "C" fn start_firmware() -> !
 
         let result = match boot_mode {
             0 => sd::load(ddr2::BASE_ADDR),
-            1 => serial::serial_load(ddr2::BASE_ADDR),
+            1 => serial::load(ddr2::BASE_ADDR),
             _ => panic!("INVALID MSEL CONFIGURATION"),
         };
 

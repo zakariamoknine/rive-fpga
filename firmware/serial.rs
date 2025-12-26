@@ -1,13 +1,13 @@
 use crate::mmio::*;
+use crate::uart8250::getc;
 use crate::error::FirmwareError;
 const SERIAL_MAGIC: u32 = 0x52444C52; 
-const MAX_SIZE: u32 = 128 * 1024 * 1024;
+const MAX_SIZE: u32 = ddr2::SIZE;
 
 #[repr(C)]
 pub struct SerialHeader { 
     pub magic : u32, 
     pub size : u32, 
-    pub entry_offset : u32,
 } 
 impl SerialHeader{ 
     pub fn parse(bytes : &[u8])-> Result<Self, FirmwareError> {
@@ -15,44 +15,30 @@ impl SerialHeader{
             return Err(FirmwareError::UartSizeOverflow); 
         }
         let magic = u32::from_le_bytes(bytes[0..4].try_into().unwrap()); 
-        let size = u32::from_le_bytes(bytes[4..8].try_into().unwrap()); 
-        let entry_offset = u32::from_le_bytes(bytes[8..12].try_into().unwrap()); 
+        let size = u32::from_le_bytes(bytes[4..8].try_into().unwrap());  
         Ok(Self{ 
             magic, 
             size, 
-            entry_offset,
         })   
     }
-    
-    // pub unsafe fn load(addr: usize) -> Result<(), FirmwareError>
-    // { 
-    //    let mut adr = addr as *mut u8; 
-    //    for _ in 0..size { 
-    //     let byte = .read_byte(); 
-    //     unsafe  { 
-    //         core::ptr::write_volatile(addr, byte);
-    //     } 
-    //    }
-    //  }
     pub fn validate(&self)-> Result<(), FirmwareError> { 
         if self.magic != SERIAL_MAGIC {
             return Err(FirmwareError::UartInvalidMagicNumber); 
         }
-        if self.size ==0 || self.size > ddr2::SIZE { 
+        if self.size ==0 || self.size > MAX_SIZE { 
             return Err(FirmwareError::UartSizeOverflow);
-        }
-        if self.entry_offset >= self.size { 
-            return Err(FirmwareError::UartEntryOffsetOverflow); 
         }
         Ok(())
     }
 
 } 
-pub fn read_header() -> Result<SerialHeader, FirmwareError> { 
+pub unsafe fn read_header() -> Result<SerialHeader, FirmwareError> { 
         const HEADER_SIZE:usize = core::mem::size_of::<SerialHeader>(); 
         let mut buf = [u8; HEADER_SIZE]; 
         for i in 0..HEADER_SIZE { 
-            buf[i]= mmio::uart_getc(); 
+            unsafe {
+                buf[i]= getc();   
+            } 
         }
         let header = SerialHeader::parse(&buf); 
         header.validate()?; 
@@ -60,18 +46,18 @@ pub fn read_header() -> Result<SerialHeader, FirmwareError> {
     } 
 pub unsafe fn load_payload(base :usize ,size: u32){ 
     let mut addr = base as *mut u8;  
-    for _ in 0..size { 
-        let byte = mmio::uart_getc(); 
+    for _ in 0..size {  
         unsafe { 
-            core::ptr::write_volatile(addr, byte);
+            let byte = getc();
+            iowrite8(addr, byte);
             addr = addr.add(1); 
         }
     }
 }
-pub unsafe fn serial_load(base : usize )-> Result<usize,FirmwareError>{ 
+pub unsafe fn load(base : usize )-> Result<usize,FirmwareError>{ 
     let header = read_header()?; 
     unsafe {
         load_payload(base, header.size);
-        Ok(base + header.entry_offset as usize)
+        Ok(base as usize)
     } 
 }
