@@ -59,7 +59,7 @@ pub fn read_header() -> Result<SerialHeader, FirmwareError> {
 pub unsafe fn load_payload(base :usize ,size: u32){ 
     let mut addr = base as *mut u8;  
     for _ in 0..size { 
-        let byte = mmio::uart_getc(); 
+        let byte = getc(); 
         unsafe { 
             core::ptr::write_volatile(addr, byte);
             addr = addr.add(1); 
