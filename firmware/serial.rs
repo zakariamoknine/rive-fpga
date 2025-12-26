@@ -70,6 +70,6 @@ pub unsafe fn serial_load(base : usize )-> Result<usize,FirmwareError>{
     let header = read_header()?; 
     unsafe {
         load_payload(base, header.size);
-        Ok(base + header.entry_offset as usize)
+        Ok(base as usize)
     } 
 }
