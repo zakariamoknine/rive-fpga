@@ -15,7 +15,6 @@ impl SerialHeader{
         }
         let magic = u32::from_le_bytes(bytes[0..4].try_into().unwrap()); 
         let size = u32::from_le_bytes(bytes[4..8].try_into().unwrap()); 
-        let entry_offset = u32::from_le_bytes(bytes[8..12].try_into().unwrap()); 
         Ok(Self{ 
             magic, 
             size, 
