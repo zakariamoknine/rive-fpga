@@ -61,7 +61,7 @@ pub unsafe fn load_payload(base :usize ,size: u32){
     for _ in 0..size { 
         let byte = getc(); 
         unsafe { 
-            core::ptr::write_volatile(addr, byte);
+            iowrite8(addr, byte);
             addr = addr.add(1); 
         }
     }
