@@ -7,7 +7,6 @@ const MAX_SIZE: u32 = 128 * 1024 * 1024;
 pub struct SerialHeader { 
     pub magic : u32, 
     pub size : u32, 
-    pub entry_offset : u32,
 } 
 impl SerialHeader{ 
     pub fn parse(bytes : &[u8])-> Result<Self, FirmwareError> {
