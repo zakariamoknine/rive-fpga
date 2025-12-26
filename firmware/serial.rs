@@ -36,6 +36,7 @@ pub unsafe fn read_header() -> Result<SerialHeader, FirmwareError> {
         const HEADER_SIZE:usize = core::mem::size_of::<SerialHeader>(); 
         let mut buf = [u8; HEADER_SIZE]; 
         for i in 0..HEADER_SIZE { 
+            buf[i] = getc(); 
             unsafe {
                 buf[i]= getc();   
             } 
@@ -46,8 +47,10 @@ pub unsafe fn read_header() -> Result<SerialHeader, FirmwareError> {
     } 
 pub unsafe fn load_payload(base :usize ,size: u32){ 
     let mut addr = base as *mut u8;  
-    for _ in 0..size {  
+    for _ in 0..size { 
+        let byte = mmio::uart_getc(); 
         unsafe { 
+            iowrite8(addr, byte);
             let byte = getc();
             iowrite8(addr, byte);
             addr = addr.add(1); 
