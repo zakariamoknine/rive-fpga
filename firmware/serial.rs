@@ -50,7 +50,7 @@ pub fn read_header() -> Result<SerialHeader, FirmwareError> {
         const HEADER_SIZE:usize = core::mem::size_of::<SerialHeader>(); 
         let mut buf = [u8; HEADER_SIZE]; 
         for i in 0..HEADER_SIZE { 
-            buf[i]= mmio::uart_getc(); 
+            buf[i] = getc(); 
         }
         let header = SerialHeader::parse(&buf); 
         header.validate()?; 
