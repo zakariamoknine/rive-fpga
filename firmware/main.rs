@@ -9,8 +9,7 @@ mod devices;
 mod serial;
 mod sd;
 
-use crate::mmio::*;
-
+use crate::mmio::*; 
 core::arch::global_asm!(include_str!("entry.S"));
 
 #[panic_handler]
